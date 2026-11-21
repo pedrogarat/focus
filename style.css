@@ -915,48 +915,41 @@ body[data-theme="kids"].zen-fullscreen .time-display {
 .spotify-connect-box {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 10px;
-}
-
-.spotify-setup-row {
-  display: flex;
-  gap: 8px;
-}
-
-.spotify-setup-row input {
-  flex: 1;
-  height: 36px;
-  padding: 0 11px;
-  border-radius: 9px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.78rem;
-  outline: none;
-}
-
-.spotify-setup-row input:focus {
-  border-color: #1db954;
+  padding: 6px 0 2px;
 }
 
 .btn-spotify {
-  flex-shrink: 0;
-  height: 36px;
-  padding: 0 15px;
-  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 999px;
   border: none;
   background: #1db954;
   color: #06130a;
   font-family: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.86rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: filter 0.15s ease;
+  transition: filter 0.15s ease, transform 0.12s ease;
+}
+
+.btn-spotify svg {
+  width: 18px;
+  height: 18px;
 }
 
 .btn-spotify:hover {
   filter: brightness(1.08);
+}
+
+.btn-spotify:active {
+  transform: scale(0.97);
 }
 
 .spotify-help {

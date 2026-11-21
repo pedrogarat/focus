@@ -228,23 +228,16 @@
 
       <!-- Panel Spotify (Web Playback SDK) -->
       <div class="tab-panel active" id="panelSpotify" role="tabpanel" aria-labelledby="tabSpotify">
-        <!-- Estado desconectado: configuración de Client ID + botón conectar -->
+        <!-- Estado desconectado: botón directo de conexión -->
         <div class="spotify-connect-box" id="spotifyConnectBox">
-          <div class="spotify-setup-row">
-            <input
-              type="text"
-              id="spotifyClientIdInput"
-              placeholder="Pega aquí tu Spotify Client ID..."
-              autocomplete="off"
-            />
-            <button type="button" class="btn-spotify" id="spotifyConnectBtn">
-              Conectar
-            </button>
-          </div>
+          <button type="button" class="btn-spotify btn-spotify-full" id="spotifyConnectBtn">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm4.59 14.42a.62.62 0 0 1-.86.21 10.67 10.67 0 0 0-8.17-.91.62.62 0 1 1-.35-1.2 11.9 11.9 0 0 1 9.17 1.04.62.62 0 0 1 .21.86zm1.22-2.73a.78.78 0 0 1-1.07.26 13.3 13.3 0 0 0-10.1-1.15.78.78 0 0 1-.44-1.5 14.85 14.85 0 0 1 11.35 1.32.78.78 0 0 1 .26 1.07zm.11-2.84a16.1 16.1 0 0 0-12.4-1.3.93.93 0 1 1-.53-1.79 18 18 0 0 1 13.86 1.46.93.93 0 0 1-.93 1.63z"/>
+            </svg>
+            Conectar con Spotify
+          </button>
           <p class="spotify-help">
-            Usa tu cuenta <strong>Spotify Premium</strong> para reproducir canciones completas sin cortes.
-            Crea una app en <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">Spotify Developer Dashboard</a>
-            con Redirect URI: <code id="spotifyRedirectHint"></code>
+            Inicia sesión con tu cuenta <strong>Spotify Premium</strong> para reproducir listas completas sin cortes y sincronizadas con el crono.
           </p>
         </div>
 

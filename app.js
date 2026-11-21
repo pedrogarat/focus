@@ -2,6 +2,7 @@
   const STORAGE_KEY = "focus_pomodoro_prefs_v1";
   const SPOTIFY_AUTH_KEY = "focus_spotify_auth_v1";
   const SPOTIFY_VERIFIER_KEY = "focus_spotify_pkce_verifier";
+  const SPOTIFY_CLIENT_ID = "cdbfa9b02472458a88725218f92650b3";
   const DEFAULT_SPOTIFY_URL = "https://open.spotify.com/playlist/0bRF8dCUmHGDR0r7Nm21OS?si=f3c6d4217371447e";
   const SPOTIFY_SCOPES = [
     "streaming",
@@ -49,9 +50,7 @@
   // DOM elements — Spotify SDK
   const spotifyConnectBox = document.getElementById("spotifyConnectBox");
   const spotifyConnectedBox = document.getElementById("spotifyConnectedBox");
-  const spotifyClientIdInput = document.getElementById("spotifyClientIdInput");
   const spotifyConnectBtn = document.getElementById("spotifyConnectBtn");
-  const spotifyRedirectHint = document.getElementById("spotifyRedirectHint");
   const spotifyStatusText = document.getElementById("spotifyStatusText");
   const spotifyDisconnectBtn = document.getElementById("spotifyDisconnectBtn");
   const spotifyForm = document.getElementById("spotifyForm");
@@ -599,26 +598,19 @@
   }
 
   async function startSpotifyLogin() {
-    const clientId = spotifyClientIdInput.value.trim();
-    if (!clientId) {
-      showSpotifyError("Introduce primero tu Spotify Client ID.");
-      return;
-    }
     if (window.location.protocol === "file:") {
-      showSpotifyError("Spotify Web Playback SDK requiere abrir la app por https:// (tu enlace de GitHub Pages) o http://localhost.");
+      showSpotifyError("Spotify Web Playback SDK requiere abrir la app por https:// (tu enlace de GitHub Pages) o http://127.0.0.1.");
       return;
     }
 
     showSpotifyError("");
-    prefs.spotifyClientId = clientId;
-    savePrefs();
 
     const verifier = randomString(64);
     const challenge = await sha256Base64Url(verifier);
     localStorage.setItem(SPOTIFY_VERIFIER_KEY, verifier);
 
     const params = new URLSearchParams({
-      client_id: clientId,
+      client_id: SPOTIFY_CLIENT_ID,
       response_type: "code",
       redirect_uri: getSpotifyRedirectUri(),
       scope: SPOTIFY_SCOPES,
@@ -644,13 +636,12 @@
     if (!code) return;
 
     const verifier = localStorage.getItem(SPOTIFY_VERIFIER_KEY);
-    const clientId = prefs.spotifyClientId;
     url.searchParams.delete("code");
     url.searchParams.delete("state");
     history.replaceState({}, document.title, url.pathname);
 
-    if (!verifier || !clientId) {
-      showSpotifyError("Faltan datos de verificación PKCE. Pulsa Conectar de nuevo.");
+    if (!verifier) {
+      showSpotifyError("Faltan datos de verificación PKCE. Pulsa Conectar con Spotify de nuevo.");
       return;
     }
 
@@ -659,7 +650,7 @@
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
-          client_id: clientId,
+          client_id: SPOTIFY_CLIENT_ID,
           grant_type: "authorization_code",
           code,
           redirect_uri: getSpotifyRedirectUri(),
@@ -690,7 +681,7 @@
       return auth.access_token;
     }
 
-    if (!auth.refresh_token || !prefs.spotifyClientId) {
+    if (!auth.refresh_token) {
       disconnectSpotify();
       return null;
     }
@@ -700,7 +691,7 @@
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
-          client_id: prefs.spotifyClientId,
+          client_id: SPOTIFY_CLIENT_ID,
           grant_type: "refresh_token",
           refresh_token: auth.refresh_token,
         }),
@@ -1212,9 +1203,7 @@
     volumeSlider.value = String(prefs.volume);
     spotifyVolumeSlider.value = String(prefs.volume);
     localAudio.volume = prefs.volume;
-    spotifyClientIdInput.value = prefs.spotifyClientId || "";
     spotifyUrlInput.value = prefs.spotifyUrl;
-    spotifyRedirectHint.textContent = getSpotifyRedirectUri();
 
     applyTheme(prefs.theme, false);
     setActiveMusicTab(prefs.activeTab, false);
