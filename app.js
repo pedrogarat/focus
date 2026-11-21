@@ -51,7 +51,7 @@
 
   // DOM elements — Spotify SDK
   const spotifyConnectBox = document.getElementById("spotifyConnectBox");
-  const spotifyConnectedBox = document.getElementById("spotifyConnectedBox");
+  const spotifyConnectedBar = document.getElementById("spotifyConnectedBar");
   const spotifyConnectBtn = document.getElementById("spotifyConnectBtn");
   const spotifyStatusText = document.getElementById("spotifyStatusText");
   const spotifyDisconnectBtn = document.getElementById("spotifyDisconnectBtn");
@@ -770,7 +770,7 @@
     const auth = loadSpotifyAuth();
     const loggedIn = Boolean(auth && auth.access_token);
     spotifyConnectBox.hidden = loggedIn;
-    spotifyConnectedBox.hidden = !loggedIn;
+    spotifyConnectedBar.hidden = !loggedIn;
   }
 
   function disconnectSpotify() {
@@ -888,7 +888,13 @@
     }
 
     if (!spotifyDeviceId) {
-      showSpotifyError("El reproductor de Spotify aún está conectando. Espera un segundo e inténtalo de nuevo.");
+      const auth = loadSpotifyAuth();
+      if (!auth || !auth.access_token) {
+        showSpotifyError("Conecta tu cuenta de Spotify en el icono ⚙️.");
+        setTimeout(() => setSettingsOpen(true), 0);
+      } else {
+        showSpotifyError("El reproductor de Spotify aún está conectando. Espera un segundo e inténtalo de nuevo.");
+      }
       return;
     }
 
@@ -942,8 +948,16 @@
     playSpotifyFromInput();
   });
 
-  spotifyPlayPauseBtn.addEventListener("click", async () => {
-    if (!spotifyPlayer || !spotifyDeviceId) return;
+  spotifyPlayPauseBtn.addEventListener("click", async (e) => {
+    if (!spotifyPlayer || !spotifyDeviceId) {
+      const auth = loadSpotifyAuth();
+      if (!auth || !auth.access_token) {
+        e.stopPropagation();
+        showSpotifyError("Conecta tu cuenta de Spotify en el icono ⚙️.");
+        setSettingsOpen(true);
+      }
+      return;
+    }
     if (typeof spotifyPlayer.activateElement === "function") {
       await spotifyPlayer.activateElement().catch(() => {});
     }

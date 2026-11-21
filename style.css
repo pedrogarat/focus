@@ -70,6 +70,10 @@ body[data-theme="basket"] .btn-primary {
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   min-height: 100%;
   background: radial-gradient(circle at top, #151a24 0%, var(--bg) 60%);
@@ -729,13 +733,22 @@ body[data-theme="kids"].zen-fullscreen .time-display {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  width: 268px;
-  padding: 12px 14px;
+  width: 296px;
+  max-width: calc(100vw - 48px);
+  padding: 14px;
   border-radius: 12px;
   background: #1a1f2b;
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
   z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-divider {
+  height: 1px;
+  background: var(--border);
 }
 
 .settings-row {
