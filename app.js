@@ -239,9 +239,30 @@
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }
 
+  // Pause all music sources except `keepSource` so only one plays at a time
+  function pauseOtherSources(keepSource) {
+    if (keepSource !== "spotify" && spotifyPlayer) {
+      spotifyPlayer.pause().catch(() => {});
+    }
+    if (keepSource !== "youtube" && ytPlayer && ytPlayerReady) {
+      try {
+        ytPlayer.pauseVideo();
+      } catch {
+        // Ignore player state errors
+      }
+    }
+    if (keepSource !== "local" && localAudio && !localAudio.paused) {
+      localAudio.pause();
+    }
+  }
+
   // Sync Timer Play/Pause -> Active Music Player
   function syncMusicWithTimer(shouldPlay) {
     if (!prefs.syncMusic) return;
+
+    if (shouldPlay) {
+      pauseOtherSources(activeMusicTab);
+    }
 
     if (activeMusicTab === "spotify") {
       if (!spotifyPlayer || !spotifyDeviceId) return;
@@ -526,6 +547,9 @@
 
   // Music Tabs
   function setActiveMusicTab(target, persist = true) {
+    if (target !== activeMusicTab) {
+      pauseOtherSources(target);
+    }
     activeMusicTab = target;
     tabs.forEach((t) => {
       const active = t.dataset.tab === target;
@@ -808,6 +832,9 @@
       if (!state) return;
       spotifyIsPaused = state.paused;
       spotifyPlayPauseBtn.classList.toggle("playing", !state.paused);
+      if (!state.paused) {
+        pauseOtherSources("spotify");
+      }
 
       const track = state.track_window?.current_track;
       if (track) {
@@ -965,6 +992,9 @@
 
   function mountOrUpdateYoutube(target, autoplay = false) {
     if (!target) return;
+    if (autoplay) {
+      pauseOtherSources("youtube");
+    }
     pendingYoutubeTarget = target;
     youtubePlaceholder.hidden = true;
 
@@ -1008,6 +1038,11 @@
             } else {
               ytPlayer.cuePlaylist({ list: pendingYoutubeTarget.listId, listType: "playlist", index: 0 });
             }
+          }
+        },
+        onStateChange: (event) => {
+          if (window.YT && event.data === window.YT.PlayerState.PLAYING) {
+            pauseOtherSources("youtube");
           }
         },
       },
@@ -1110,7 +1145,10 @@
     }
   });
 
-  localAudio.addEventListener("play", () => audioPlayBtn.classList.add("playing"));
+  localAudio.addEventListener("play", () => {
+    audioPlayBtn.classList.add("playing");
+    pauseOtherSources("local");
+  });
   localAudio.addEventListener("pause", () => audioPlayBtn.classList.remove("playing"));
   localAudio.addEventListener("ended", () => {
     if (!localAudio.loop) {
