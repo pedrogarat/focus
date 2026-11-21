@@ -45,6 +45,8 @@
   const panelSpotify = document.getElementById("panelSpotify");
   const panelYoutube = document.getElementById("panelYoutube");
   const panelLocal = document.getElementById("panelLocal");
+  const musicSettingsBtn = document.getElementById("musicSettingsBtn");
+  const musicSettingsPopover = document.getElementById("musicSettingsPopover");
   const syncMusicToggle = document.getElementById("syncMusicToggle");
 
   // DOM elements — Spotify SDK
@@ -532,11 +534,37 @@
     prefs.bellEnabled = prev;
   });
 
-  // Sync Toggle
+  // Music Settings Popover & Sync Toggle
+  function setSettingsOpen(open) {
+    musicSettingsPopover.hidden = !open;
+    musicSettingsBtn.classList.toggle("open", open);
+    musicSettingsBtn.setAttribute("aria-expanded", String(open));
+  }
+
+  musicSettingsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setSettingsOpen(musicSettingsPopover.hidden);
+  });
+
+  musicSettingsPopover.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", () => {
+    if (!musicSettingsPopover.hidden) {
+      setSettingsOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !musicSettingsPopover.hidden) {
+      setSettingsOpen(false);
+    }
+  });
+
   function renderSyncToggle() {
     syncMusicToggle.classList.toggle("active", prefs.syncMusic);
-    syncMusicToggle.setAttribute("aria-pressed", String(prefs.syncMusic));
-    syncMusicToggle.textContent = prefs.syncMusic ? "Sincronizar: Sí" : "Sincronizar: No";
+    syncMusicToggle.setAttribute("aria-checked", String(prefs.syncMusic));
   }
 
   syncMusicToggle.addEventListener("click", () => {

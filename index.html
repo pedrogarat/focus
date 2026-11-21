@@ -215,15 +215,42 @@
           <button class="tab" role="tab" aria-selected="false" data-tab="youtube" id="tabYoutube">YouTube</button>
           <button class="tab" role="tab" aria-selected="false" data-tab="local" id="tabLocal">MP3 Local</button>
         </div>
-        <button
-          type="button"
-          class="btn-chip btn-sync active"
-          id="syncMusicToggle"
-          aria-pressed="true"
-          title="Sincronizar Play/Pausa del temporizador con la música"
-        >
-          Sincronizar: Sí
-        </button>
+
+        <div class="settings-menu-wrap">
+          <button
+            type="button"
+            class="btn btn-icon btn-icon-sm settings-btn"
+            id="musicSettingsBtn"
+            aria-haspopup="true"
+            aria-expanded="false"
+            title="Opciones de música"
+            aria-label="Opciones de música"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </button>
+
+          <div class="settings-popover" id="musicSettingsPopover" hidden>
+            <div class="settings-row">
+              <div class="settings-row-text">
+                <span class="settings-row-title">Sincronizar con el crono</span>
+                <span class="settings-row-desc">Play/Pausa automático en Spotify, YouTube y MP3</span>
+              </div>
+              <button
+                type="button"
+                class="toggle-switch active"
+                id="syncMusicToggle"
+                role="switch"
+                aria-checked="true"
+                aria-label="Sincronizar música con el crono"
+              >
+                <span class="toggle-knob"></span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Panel Spotify (Web Playback SDK) -->
