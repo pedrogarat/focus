@@ -1163,6 +1163,40 @@
   });
 
   // =========================================================================
+  // PLAYLIST SUGGESTIONS
+  // =========================================================================
+  const suggestionChips = document.querySelectorAll(".suggestion-chip");
+  suggestionChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const source = chip.dataset.source;
+      const url = chip.dataset.url;
+      if (!url) return;
+
+      if (source === "spotify") {
+        setActiveMusicTab("spotify", true);
+        spotifyUrlInput.value = url;
+        prefs.spotifyUrl = url;
+        savePrefs();
+        if (spotifyDeviceId) {
+          playSpotifyFromInput();
+        } else {
+          showSpotifyError("");
+        }
+      } else if (source === "youtube") {
+        setActiveMusicTab("youtube", true);
+        youtubeUrlInput.value = url;
+        prefs.youtubeUrl = url;
+        savePrefs();
+        const parsed = parseYoutubeInput(url);
+        if (parsed) {
+          showYoutubeError("");
+          mountOrUpdateYoutube(parsed, true);
+        }
+      }
+    });
+  });
+
+  // =========================================================================
   // FULLSCREEN ZEN MODE
   // =========================================================================
   function enterZenFullscreen() {

@@ -209,7 +209,8 @@ body.zen-fullscreen .app {
 
 body.zen-fullscreen .header,
 body.zen-fullscreen .controls,
-body.zen-fullscreen .config-card {
+body.zen-fullscreen .config-card,
+body.zen-fullscreen .suggestions-card {
   display: none;
 }
 
@@ -1109,6 +1110,72 @@ body[data-theme="kids"].zen-fullscreen .time-display {
   color: var(--text-muted);
   text-align: center;
   line-height: 1.45;
+}
+
+/* Suggestions Card */
+.suggestions-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.suggestions-title {
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.suggestion-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.suggestion-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.suggestion-label-spotify {
+  color: #1db954;
+}
+
+.suggestion-label-youtube {
+  color: #f87171;
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.suggestion-chip {
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.77rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+}
+
+.suggestion-chip:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+}
+
+.suggestion-chip:active {
+  transform: scale(0.97);
 }
 
 @media (max-width: 440px) {
