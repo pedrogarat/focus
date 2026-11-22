@@ -234,23 +234,22 @@
 
     const now = audioCtx.currentTime;
     if (type === "break") {
-      // Energetic victorious fanfare (entering break) — two lively bursts
-      playTone(523.25, now + 0.00, 0.22, 0.42); // C5
-      playTone(659.25, now + 0.13, 0.22, 0.44); // E5
-      playTone(783.99, now + 0.26, 0.24, 0.46); // G5
-      playTone(1046.5, now + 0.39, 0.52, 0.50); // C6
-
-      playTone(783.99, now + 1.02, 0.20, 0.44); // G5
-      playTone(1046.5, now + 1.16, 0.65, 0.52); // C6
+      // Energetic victorious fanfare (entering break) — repeated 3 times
+      for (let i = 0; i < 3; i += 1) {
+        const t = now + i * 1.05;
+        playTone(523.25, t + 0.00, 0.22, 0.42); // C5
+        playTone(659.25, t + 0.13, 0.22, 0.44); // E5
+        playTone(783.99, t + 0.26, 0.24, 0.46); // G5
+        playTone(1046.5, t + 0.39, 0.50, 0.52); // C6
+      }
     } else {
-      // Crisp upbeat wake-up alert (back to focus) — double rhythmic pulse
-      playTone(880.00, now + 0.00, 0.16, 0.44); // A5
-      playTone(880.00, now + 0.18, 0.16, 0.44); // A5
-      playTone(1174.66, now + 0.36, 0.42, 0.50); // D6
-
-      playTone(880.00, now + 0.92, 0.16, 0.44); // A5
-      playTone(880.00, now + 1.10, 0.16, 0.44); // A5
-      playTone(1174.66, now + 1.28, 0.55, 0.52); // D6
+      // Crisp upbeat wake-up alert (back to focus) — repeated 3 times
+      for (let i = 0; i < 3; i += 1) {
+        const t = now + i * 0.95;
+        playTone(880.00, t + 0.00, 0.16, 0.44); // A5
+        playTone(880.00, t + 0.18, 0.16, 0.44); // A5
+        playTone(1174.66, t + 0.36, 0.45, 0.52); // D6
+      }
     }
   }
 
