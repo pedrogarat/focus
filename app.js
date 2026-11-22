@@ -192,23 +192,39 @@
     }
   }
 
-  function playTone(freq, startTime, duration, gainPeak = 0.22) {
+  function playTone(freq, startTime, duration, gainPeak = 0.42, wave = "triangle") {
     if (!audioCtx) return;
+
+    // Main punchy oscillator
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-
-    osc.type = "sine";
+    osc.type = wave;
     osc.frequency.setValueAtTime(freq, startTime);
 
     gain.gain.setValueAtTime(0.0001, startTime);
-    gain.gain.exponentialRampToValueAtTime(gainPeak, startTime + 0.025);
+    gain.gain.exponentialRampToValueAtTime(gainPeak, startTime + 0.012);
+    gain.gain.exponentialRampToValueAtTime(gainPeak * 0.55, startTime + duration * 0.45);
     gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-
     osc.start(startTime);
-    osc.stop(startTime + duration + 0.05);
+    osc.stop(startTime + duration + 0.04);
+
+    // Bright upper octave harmonic so it cuts cleanly through background music
+    const overtone = audioCtx.createOscillator();
+    const overtoneGain = audioCtx.createGain();
+    overtone.type = "sine";
+    overtone.frequency.setValueAtTime(freq * 2, startTime);
+
+    overtoneGain.gain.setValueAtTime(0.0001, startTime);
+    overtoneGain.gain.exponentialRampToValueAtTime(gainPeak * 0.35, startTime + 0.01);
+    overtoneGain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration * 0.75);
+
+    overtone.connect(overtoneGain);
+    overtoneGain.connect(audioCtx.destination);
+    overtone.start(startTime);
+    overtone.stop(startTime + duration + 0.04);
   }
 
   function playChime(type = "break") {
@@ -218,11 +234,23 @@
 
     const now = audioCtx.currentTime;
     if (type === "break") {
-      playTone(659.25, now, 0.9, 0.2);        // E5
-      playTone(493.88, now + 0.22, 1.2, 0.18); // B4
+      // Energetic victorious fanfare (entering break) — two lively bursts
+      playTone(523.25, now + 0.00, 0.22, 0.42); // C5
+      playTone(659.25, now + 0.13, 0.22, 0.44); // E5
+      playTone(783.99, now + 0.26, 0.24, 0.46); // G5
+      playTone(1046.5, now + 0.39, 0.52, 0.50); // C6
+
+      playTone(783.99, now + 1.02, 0.20, 0.44); // G5
+      playTone(1046.5, now + 1.16, 0.65, 0.52); // C6
     } else {
-      playTone(523.25, now, 0.7, 0.2);        // C5
-      playTone(783.99, now + 0.2, 1.1, 0.22); // G5
+      // Crisp upbeat wake-up alert (back to focus) — double rhythmic pulse
+      playTone(880.00, now + 0.00, 0.16, 0.44); // A5
+      playTone(880.00, now + 0.18, 0.16, 0.44); // A5
+      playTone(1174.66, now + 0.36, 0.42, 0.50); // D6
+
+      playTone(880.00, now + 0.92, 0.16, 0.44); // A5
+      playTone(880.00, now + 1.10, 0.16, 0.44); // A5
+      playTone(1174.66, now + 1.28, 0.55, 0.52); // D6
     }
   }
 
